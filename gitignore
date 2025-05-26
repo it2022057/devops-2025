@@ -1,7 +1,13 @@
+# General
+*.log
+*.tmp
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# Java
+*.class
 
 ### STS ###
 .apt_generated
