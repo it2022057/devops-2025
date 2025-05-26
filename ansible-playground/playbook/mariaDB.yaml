@@ -1,0 +1,75 @@
+---
+  - name: install mariaDB
+    hosts: azure-hosts
+    become: yes
+    become_user: root
+
+    tasks:
+      - name: install mariaDB package
+        apt:
+          name: mariadb-server
+          state: present
+          update_cache: yes
+        tags:
+          - install      
+
+      - name: Ensure MariaDB config allows remote connections
+        lineinfile:
+          path: /etc/mysql/mariadb.conf.d/50-server.cnf
+          regexp: '^#bind-address'
+          line: 'bind-address = 0.0.0.0'
+          backup: yes
+        notify:
+          - restart mariaDB
+        tags:
+          - edit
+      
+      - block:
+        - name: create mariaDB database
+          mysql_db:
+            name: mariadb
+            state: present
+            login_user: root
+            login_password: 'pass12345'
+        
+        - name: create mariaDB user
+          mysql_user:
+            name: dbadmin
+            password: 'pass12345'
+            login_user: root
+            login_password: 'pass12345'
+            host: "%" 
+            priv: '*.*:ALL'
+            state: present
+      
+        rescue:
+          - name: Install Python MySQL module (PyMySQL)
+            apt:
+              name: python3-pymysql
+              state: present
+            tags:
+              - install
+
+        always:
+          - name: create mariaDB database
+            mysql_db:
+              name: mariadb
+              state: present
+              login_user: root
+              login_password: 'pass12345'
+          
+          - name: create mariaDB user
+            mysql_user:
+              name: dbadmin
+              password: 'pass12345'
+              login_user: root
+              login_password: 'pass12345'
+              priv: '*.*:ALL'
+              state: present
+
+
+    handlers:
+      - name: restart mariaDB
+        service:
+          name: mariadb
+          state: restarted

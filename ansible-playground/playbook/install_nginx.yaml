@@ -1,0 +1,23 @@
+---
+- name: install nginx server
+  hosts: all
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: install nginx package
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+    - name: copy index.html
+      copy:
+        src: ../files/index.html
+        dest: /var/www/html/index.html
+      notify: restart nginx service
+
+  handlers:
+    - name: restart nginx service
+      service:
+        name: nginx
+        state: restarted
