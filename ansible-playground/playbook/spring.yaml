@@ -1,6 +1,6 @@
 ---
   - name: Install spring boot application
-    hosts: all
+    hosts: azure-hosts
 
     pre_tasks:
       - name: Install java
@@ -9,15 +9,25 @@
           state: present
           update_cache: yes
         become: yes
+        tags:
+          - install
     
     tasks:
       - name: Debug appdir
         ansible.builtin.debug:
           msg: "appdir --> {{ansible_user_dir}}"
 
+      - name: Ensure git is installed
+        apt:
+          name: git
+          state: present
+        become: yes
+        tags:
+          - install
+
       - name: Clone git repo
         git:
-          repo: 'https://gitlab.hua.gr/it2022057/ds-project-2024.git'
+          repo: 'https://github.com/it2022057/ds-project-2024.git'
           dest: "{{ appdir }}"
           version: "{{ branch }}"
           force: yes
@@ -30,6 +40,8 @@
           line: "{{item.key}}={{item.value}}"
         with_items:
           - "{{app.env | dict2items}}"
+        tags:
+          - edit
 
         
       - name: Build spring project
@@ -39,6 +51,8 @@
             ansible.builtin.file:
               path: "{{ appdir }}/mvnw"
               mode: "0755"  # Gives execute permissions (rwxr-xr-x)
+            tags:
+              - edit
 
           - name: Build the Spring application
             command: "./mvnw package -Dmaven.test.skip "
@@ -69,6 +83,8 @@
               path: "{{ appdir }}/.mvn/wrapper/maven-wrapper.properties"
               regexp: '^distributionSha'
               replace: "distributionSha512Sum={{ sha512_checksum.stdout }}"
+            tags:
+              - edit
             
           - name: Clean up the temporary file
             file:
@@ -109,6 +125,8 @@
           name: nginx
           update_cache: yes
         become: yes
+        tags:
+          - install
 
       - name: Copy nginx conf file
         template:

@@ -1,14 +1,13 @@
-db:
-  name: "mydb"
-  user: "myuser"
-  password: "pass12345"
+backend_server_url: "http://20.234.5.108:8080"
 
 app:
+  VITE_BACKEND:  http://20.234.5.108
   env:
     server.port: "{{app_port}}"
     spring.datasource.username: myuser
     spring.datasource.password: pass12345
-    spring.datasource.url: jdbc:postgresql://20.234.5.108:5432/mydb
+    spring.datasource.url: jdbc:mariadb://4.223.107.0:3306/mariadb
+    spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MariaDBDialect
 
 service:
   workingdir: "{{ ansible_user_dir }}/ds-project-2024"
