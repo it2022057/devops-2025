@@ -1,0 +1,4 @@
+db:
+  name: "mariadb"
+  user: "myuser"
+  password: "pass12345"

@@ -1,6 +1,6 @@
 ---
   - name: install mariaDB
-    hosts: azure-hosts
+    hosts: db-servers
     become: yes
     become_user: root
 
@@ -16,7 +16,7 @@
       - name: Ensure MariaDB config allows remote connections
         lineinfile:
           path: /etc/mysql/mariadb.conf.d/50-server.cnf
-          regexp: '^#bind-address'
+          regexp: '^bind-address'
           line: 'bind-address = 0.0.0.0'
           backup: yes
         notify:
@@ -27,20 +27,19 @@
       - block:
         - name: create mariaDB database
           mysql_db:
-            name: mariadb
+            name: "{{ db.name }}"
             state: present
-            login_user: root
-            login_password: 'pass12345'
-        
+            login_unix_socket: /var/run/mysqld/mysqld.sock
+
         - name: create mariaDB user
           mysql_user:
-            name: dbadmin
-            password: 'pass12345'
-            login_user: root
-            login_password: 'pass12345'
-            host: "%" 
-            priv: '*.*:ALL'
+            name: "{{ db.user }}"
+            password: "{{ db.password }}"
             state: present
+            host: "%" 
+            priv: '{{ db.name }}.*:ALL'
+            login_unix_socket: /var/run/mysqld/mysqld.sock
+            column_case_sensitive: false  # silences deprecation warning
       
         rescue:
           - name: Install Python MySQL module (PyMySQL)
@@ -53,19 +52,19 @@
         always:
           - name: create mariaDB database
             mysql_db:
-              name: mariadb
+              name: "{{ db.name }}"
               state: present
-              login_user: root
-              login_password: 'pass12345'
-          
+              login_unix_socket: /var/run/mysqld/mysqld.sock
+
           - name: create mariaDB user
             mysql_user:
-              name: dbadmin
-              password: 'pass12345'
-              login_user: root
-              login_password: 'pass12345'
-              priv: '*.*:ALL'
+              name: "{{ db.user }}"
+              password: "{{ db.password }}"
               state: present
+              host: "%" 
+              priv: '{{ db.name }}.*:ALL'
+              login_unix_socket: /var/run/mysqld/mysqld.sock
+              column_case_sensitive: false  # silences deprecation warning
 
 
     handlers:
