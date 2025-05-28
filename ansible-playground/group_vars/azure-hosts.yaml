@@ -9,9 +9,14 @@ db:
   user: "myuser"
   password: "pass12345"
 
-# app:
-#   env:
-#     server.port: "{{app_port}}"
-#     spring.datasource.username: myuser
-#     spring.datasource.password: pass12345
-#     spring.datasource.url: jdbc:mariadb://4.223.107.0:3306/mariadb
+app:
+  env:
+    server.port: "{{app_port}}"
+    spring.datasource.username: "{{ db.user }}"
+    spring.datasource.password: "{{ db.password }}"
+    spring.datasource.url: jdbc:mariadb://4.223.107.0:3306/{{ db.name }}
+    spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MariaDBDialect
+
+service:
+  workingdir: "{{ ansible_user_dir }}/ds-project-2024"
+  execstart: "java -jar {{ ansible_user_dir }}/ds-project-2024/target/ds-project-2024-0.0.1-SNAPSHOT.jar"

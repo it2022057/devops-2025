@@ -25,11 +25,14 @@
         tags:
           - install
 
+      # Added ForwardAgent = yes to my config file,
+      # in order for ssh-agent to have access to my keys remotely
       - name: Clone git repo
         git:
-          repo: 'https://github.com/it2022057/ds-project-2024.git'
+          repo: git@github.com:it2022057/ds-project-2024.git 
           dest: "{{ appdir }}"
           version: "{{ branch }}"
+          accept_hostkey: yes
           force: yes
 
       - name: Populate application.properties
