@@ -1,0 +1,86 @@
+---
+  - name: Setup Keycloak with MariaDB
+    hosts: azure-hosts
+
+    vars:
+      keycloak_version: "26.2.5"
+      keycloak_url: https://github.com/keycloak/keycloak/releases/download/{{ keycloak_version }}/keycloak-{{ keycloak_version }}.tar.gz
+      keycloak_download_dir: /tmp/keycloak-{{ keycloak_version }}.tar.gz
+      keycloak_dir: "{{ ansible_user_dir }}/keycloak-{{ keycloak_version }}"
+      keycloak_db_name: keycloak_db
+      keycloak_db_user: keycloak_user
+      keycloak_db_password: strongpassword
+      keycloak_conf: "{{ keycloak_dir }}/conf/keycloak.conf"
+
+    pre_tasks:
+      - name: Install java
+        apt:
+          name: openjdk-21-jdk
+          state: present
+          update_cache: yes
+        become: yes
+        tags:
+          - install
+
+    tasks:
+
+      - name: Download Keycloak
+        get_url:
+          url: "{{ keycloak_url }}"
+          dest: "{{ keycloak_download_dir }}"
+
+      - name: Extract Keycloak
+        unarchive:
+          src: "{{ keycloak_download_dir }}"
+          dest: "{{ ansible_user_dir }}"
+          remote_src: yes
+
+      - name: Start Keycloak in background 
+        shell: "nohup /{{ keycloak_dir }}/bin/kc.sh start-dev &"
+        args:
+          chdir: "{{ keycloak_dir }}"
+
+
+
+    #   - name: Download MariaDB JDBC driver
+    #     get_url:
+    #       url: https://downloads.mariadb.com/Connectors/java/connector-java-3.3.1/mariadb-java-client-3.3.1.jar
+    #       dest: "/{{ keycloak_dir }}/providers/mariadb-java-client-3.3.1.jar"
+    #       mode: '0644'
+
+    #   - name: Ensure required packages are installed
+    #     apt:
+    #       name: "{{ item }}"
+    #       state: present
+    #       update_cache: yes
+    #     loop:
+    #       - default-jdk
+    #       - mariadb-client
+
+    #   - name: Create Keycloak conf directory if it doesn't exist
+    #     file:
+    #       path: "{{ keycloak_dir }}/conf"
+    #       state: directory
+    #       mode: '0755'
+
+    #   - name: Configure keycloak.conf for MariaDB connection
+    #     lineinfile:
+    #       path: "{{ keycloak_conf }}"
+    #       regexp: '^{{ item.key }}='
+    #       line: "{{ item.key }}={{ item.value }}"
+    #       create: yes
+    #     loop:
+    #       - { key: 'db', value: 'mariadb' }
+    #       - { key: 'db-username', value: '{{ keycloak_db_user }}' }
+    #       - { key: 'db-password', value: '{{ keycloak_db_password }}' }
+    #       - { key: 'db-url', value: 'jdbc:mariadb://{{ hostvars["db-server"].ansible_host }}:3306/{{ keycloak_db_name }}' }
+    #       - { key: 'health-enabled', value: 'true' }
+    #       - { key: 'metrics-enabled', value: 'true' }
+    #     notify: restart keycloak
+
+    handlers:
+      - name: restart keycloak
+        systemd:
+          name: keycloak
+          state: restarted
+          enabled: yes
