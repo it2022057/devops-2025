@@ -1,0 +1,48 @@
+---
+  - name: Install Mailhog for email testing
+    hosts: azure-hosts
+
+    tasks:
+
+      - name: Create a directory
+        file:
+          path: "{{ mailhog_path }}"
+          state: directory
+          mode: '0775'
+        tags:
+          - edit
+
+      - name: Install Mailhog service
+        get_url:
+          url: https://github.com/mailhog/MailHog/releases/download/{{ mailhog_version }}/MailHog_linux_amd64
+          dest: "{{ mailhog_path }}/MailHog"
+        tags:
+          - install
+
+      - name: Make it executable
+        file:
+          path: "{{ mailhog_path }}/MailHog"
+          mode: '0775'
+        tags:
+          - edit
+
+      - name: Run Mailhog in the background
+        shell: "nohup ./MailHog > output.log 2>&1 &"
+        args:
+          chdir: "{{ mailhog_path }}"
+
+      - name: Wait for MailHog SMTP port to be available
+        wait_for:
+          host: "{{ public_ip }}"
+          port: "{{ smtp_port }}"
+          delay: 3
+          timeout: 20
+
+      - name: Send dummy email using MailHog SMTP
+        mail:
+          host: "{{ public_ip }}"
+          port: "{{ smtp_port }}"
+          from: noreply@gmail.com
+          to: example@gmail.com
+          subject: "Welcome to MailHog!"
+          body: "This is a test email environment"

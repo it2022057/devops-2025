@@ -3,6 +3,9 @@ appdir: "{{ ansible_user_dir }}/ds-project-2024"
 branch: "main"
 appuser: "{{ansible_user_id}}"
 appgroup: "{{ansible_user_gid}}"
+mailhog_path: "{{ ansible_user_dir }}/bin"
+mailhog_version: v1.0.1
+smtp_port: 1025
 
 db:
   name: "mariadb"
@@ -16,6 +19,11 @@ app:
     spring.datasource.password: "{{ db.password }}"
     spring.datasource.url: jdbc:mariadb://4.223.107.0:3306/{{ db.name }}
     spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MariaDBDialect
+    spring.mail.host: "{{ public_ip }}"
+    spring.mail.port: 1025
+    spring.mail.username: noreply.springboot21@gmail.com
+    spring.mail.properties.mail.smtp.auth: false
+    spring.mail.properties.mail.smtp.starttls.enable: false
 
 service:
   workingdir: "{{ ansible_user_dir }}/ds-project-2024"

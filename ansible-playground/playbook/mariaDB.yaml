@@ -1,11 +1,11 @@
 ---
-  - name: install mariaDB
+  - name: Install mariaDB
     hosts: db-servers
     become: yes
     become_user: root
 
     tasks:
-      - name: install mariaDB package
+      - name: Install mariaDB package
         apt:
           name: mariadb-server
           state: present
@@ -25,13 +25,13 @@
           - edit
       
       - block:
-        - name: create mariaDB database
+        - name: Create mariaDB database
           mysql_db:
             name: "{{ db.name }}"
             state: present
             login_unix_socket: /var/run/mysqld/mysqld.sock
 
-        - name: create mariaDB user
+        - name: Create mariaDB user
           mysql_user:
             name: "{{ db.user }}"
             password: "{{ db.password }}"
@@ -50,13 +50,13 @@
               - install
 
         always:
-          - name: create mariaDB database
+          - name: Create mariaDB database
             mysql_db:
               name: "{{ db.name }}"
               state: present
               login_unix_socket: /var/run/mysqld/mysqld.sock
 
-          - name: create mariaDB user
+          - name: Create mariaDB user
             mysql_user:
               name: "{{ db.user }}"
               password: "{{ db.password }}"
@@ -68,7 +68,7 @@
 
 
     handlers:
-      - name: restart mariaDB
+      - name: Restart mariaDB
         service:
           name: mariadb
           state: restarted

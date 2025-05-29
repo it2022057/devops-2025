@@ -102,7 +102,7 @@
               chdir: "{{ appdir }}"
 
 
-      - name: copy spring service file
+      - name: Copy spring service file
         template:
           src: ../files/spring.service.j2
           dest: "/etc/systemd/system/spring.service"
@@ -110,13 +110,13 @@
         become_user: root
         notify: restart spring
 
-      - name: reload spring service
+      - name: Reload spring service
         service:
           name: spring
           state: restarted
         become: yes
 
-      - name: ensure spring service started
+      - name: Ensure spring service started
         service:
           name: spring
           state: started
@@ -137,7 +137,7 @@
           dest: "/etc/nginx/sites-available/spring"
         become: yes
 
-      - name: enable spring site in nginx
+      - name: Enable spring site in nginx
         file:
           src: "/etc/nginx/sites-available/spring"
           dest: "/etc/nginx/sites-enabled/spring"
@@ -145,7 +145,7 @@
         become: yes
         notify: restart nginx
 
-      - name: de-activate default nginx site
+      - name: De-activate default nginx site
         file:
           path: /etc/nginx/sites-enabled/default
           state: absent
@@ -154,13 +154,13 @@
 
 
     handlers:
-      - name: restart spring
+      - name: Restart spring
         service:
           name: spring
           state: restarted
         become: yes
 
-      - name: restart nginx
+      - name: Restart nginx
         service:
           name: nginx
           state: restarted
