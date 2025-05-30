@@ -108,7 +108,7 @@
           dest: "/etc/systemd/system/spring.service"
         become: yes
         become_user: root
-        notify: restart spring
+        notify: Restart spring
 
       - name: Reload spring service
         service:
@@ -143,14 +143,14 @@
           dest: "/etc/nginx/sites-enabled/spring"
           state: link
         become: yes
-        notify: restart nginx
+        notify: Restart nginx
 
       - name: De-activate default nginx site
         file:
           path: /etc/nginx/sites-enabled/default
           state: absent
         become: yes
-        notify: restart nginx
+        notify: Restart nginx
 
 
     handlers:

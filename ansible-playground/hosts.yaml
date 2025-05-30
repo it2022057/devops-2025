@@ -4,7 +4,7 @@ azure-hosts:
     devops-vm-1:
       ansible_host: az-devops
     devops-vm-2:
-      ansible_host: test-vm
+      ansible_host: service-vm
 
 db-servers:
   hosts:

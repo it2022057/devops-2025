@@ -1,0 +1,69 @@
+---
+  - name: Install MinIO
+    hosts: azure-hosts
+
+    tasks:
+      - name: Download MinIO .deb package
+        get_url:
+          url: https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20250524170830.0.0_amd64.deb
+          dest: "{{ minio_download_dir }}"
+          mode: '0644'
+        tags:
+          - install
+
+      - name: Install MinIO using dpkg
+        apt:
+          deb: "{{ minio_download_dir }}"
+          state: present
+        become: yes
+        tags:
+          - install
+
+      - name: Create a new dir
+        file:
+          path: "{{ minio_dir }}"
+          state: directory
+        tags:
+          - edit
+
+      - name: Create MinIO systemd service
+        become: yes
+        copy:
+          dest: /etc/systemd/system/minio.service
+          content: |
+            [Unit]
+            Description=MinIO
+            After=network.target
+
+            [Service]
+            User={{ ansible_user_id }}
+            Group={{ ansible_user_gid }}
+            ExecStart=/usr/local/bin/minio server {{ minio_dir }} --console-address ":9001"
+            Environment="MINIO_ROOT_USER=Q3AM3UQ867SPQQA43P2F"
+            Environment="MINIO_ROOT_PASSWORD=zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG"
+            Restart=always
+            LimitNOFILE=65536
+
+            [Install]
+            WantedBy=multi-user.target
+        notify: Restart MinIO
+
+      - name: Reload systemd daemon
+        systemd:
+          daemon_reload: yes
+        become: yes
+
+      - name: Start MinIO service
+        service:
+          name: minio
+          state: started
+          enabled: yes 
+        become: yes
+
+
+    handlers:      
+      - name: Restart MinIO
+        service:
+          name: minio
+          state: restarted
+        become: yes
