@@ -28,7 +28,7 @@ app:
     spring.mail.host: "{{ public_ip }}"
     spring.mail.port: 1025
     spring.mail.username: noreply.springboot21@gmail.com
-    sprig.mail.password: ""
+    spring.mail.password: no-password-needed
     spring.mail.properties.mail.smtp.auth: false
     spring.mail.properties.mail.smtp.starttls.enable: false
 
