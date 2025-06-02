@@ -4,3 +4,6 @@
 [submodule "ansible-playground"]
 	path = ansible-playground
 	url = git@github.com:it2022057/ansible-playground.git
+[submodule "ansible-docker-playground"]
+	path = ansible-docker-playground
+	url = git@github.com:it2022057/ansible-docker-playground.git
