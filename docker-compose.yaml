@@ -3,39 +3,40 @@ services:
   db:
     restart: always
     image: mariadb:10.2.44 #10.2.44 has less high severity vulnerabilities than latest versions
+    # container_name: mariadb
     expose:
       - 3306
     ports:
       - "3306:3306"
     environment:
-      - MARIADB_ROOT_PASSWORD=pass12345
-      - MARIA_USER=myuser
-      - MARIA_PASSWORD=pass12345
-      - MARIA_DB=mariadb
+      - MYSQL_ROOT_PASSWORD=root12345
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=pass12345
+      - MYSQL_DATABASE=mariadb
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 4.223.107.0 -u myuser -p'pass12345'"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u myuser -ppass12345"]
       interval: 30s
       timeout: 30s
       retries: 3
-    volumes:
-      - 'dsprojectdb:/var/lib/mysql'
+    # volumes:
+    #   - 'dsprojectdb:/var/lib/mysql'
 
   mailhog:
     image: mailhog/mailhog:latest
-    container_name: mailhog
+    # container_name: mailhog
     restart: always
     ports:
       - "8025:8025"  # Web UI
       - "1025:1025"  # SMTP
     healthcheck:
-      test: ["CMD-SHELL", "nc -z 20.234.5.108 8025"]
+      test: ["CMD-SHELL", "nc -z localhost 8025"]
       interval: 30s
       timeout: 30s
       retries: 3
 
   minio:
     image: quay.io/minio/minio:latest
-    container_name: minio
+    # container_name: minio
     command: server /data --console-address ":9001"
     restart: always
     ports:
@@ -45,7 +46,7 @@ services:
       - MINIO_ROOT_USER=Q3AM3UQ867SPQQA43P2F
       - MINIO_ROOT_PASSWORD=zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://20.234.5.108:9000/minio/health/ready"]
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/ready"]
       interval: 30s
       timeout: 30s
       retries: 3
@@ -55,21 +56,21 @@ services:
   spring:
     restart: always
     image: main-app
-    container_name: spring
+    # container_name: spring
     build:
       context: ./ds-project-2024
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      db:
-        condition: service_healthy
+      # db:
+      #   condition: service_healthy
       mailhog:
         condition: service_healthy
       minio:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://4.223.107.0:3306/mariadb
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://db:3306/mariadb
       - SPRING_DATASOURCE_USERNAME=myuser
       - SPRING_DATASOURCE_PASSWORD=pass12345
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MariaDBDialect
@@ -84,7 +85,7 @@ services:
       - MINIO_ACCESS_SECRET=zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
       - MINIO_BUCKET_NAME=pet-adoption-app
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://20.234.5.108:8080/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 30s
       retries: 3
