@@ -1,3 +1,5 @@
+-- Important Notice: This SQL script is designed to run in a MariaDB database environment
+
 -- Choose mariadb as the database
 USE mariadb;
 
@@ -18,6 +20,13 @@ INSERT INTO users (id, username, password, email, phone) VALUES
 --                     5: shelter2
 --                     6: 12Byronlouki!
 --                     7: admin
+
+-- Declare all the available roles in this app
+INSERT INTO roles (id, name) VALUES
+                                (1, 'ROLE_CITIZEN'),
+                                (2, 'ROLE_SHELTER'),
+                                (3, 'ROLE_VETERINARIAN'),
+                                (4, 'ROLE_ADMIN');
 
 
 -- Assign Roles to Users
@@ -47,14 +56,14 @@ INSERT INTO shelter (id, name, location, address, description, approval_status) 
 
 -- Insert Pets
 INSERT INTO pet (id, name, age, species, sex, approval_status, shelter_id, citizen_id, image_path) VALUES
-                                                                                           (1, 'Buddy', 3, 'Dog', 'Male', 1, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Buddy.jpg'),
-                                                                                           (2, 'Mittens', 2, 'Cat', 'Female', 0, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Mittens.jpg'),
-                                                                                           (3, 'Rocky', 1, 'Dog', 'Male', 1, 5, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Rocky.jpg'),
-                                                                                           (4, 'Silver', 4, 'Dog', 'Male', 3, 5, 6, 'http://20.234.5.108/pet-adoption-app/pet-photos/Silver.jpg'),
-                                                                                           (5, 'Bella', 3, 'Dog', 'Female', 1, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Bella.jpg'),
-                                                                                           (6, 'Max', 2, 'Cat', 'Male', 1, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Max.jpg'),
-                                                                                           (7, 'Coco', 2, 'Parrot', 'Female', 3, 5, 1, 'http://20.234.5.108/pet-adoption-app/pet-photos/Coco.jpg'),
-                                                                                           (8, 'Daisy', 7, 'Turtle', 'Female', 2, 5, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Daisy.jpg');
+                                                                                           (1, 'Buddy', 3, 'Dog', 'Male', 1, 3, NULL, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Buddy.jpg'),
+                                                                                           (2, 'Mittens', 2, 'Cat', 'Female', 0, 3, NULL, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Mittens.jpg'),
+                                                                                           (3, 'Rocky', 1, 'Dog', 'Male', 1, 5, NULL, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Rocky.jpg'),
+                                                                                           (4, 'Silver', 4, 'Dog', 'Male', 3, 5, 6, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Silver.jpg'),
+                                                                                           (5, 'Bella', 3, 'Dog', 'Female', 1, 3, NULL, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Bella.jpg'),
+                                                                                           (6, 'Max', 2, 'Cat', 'Male', 1, 3, NULL, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Max.jpg'),
+                                                                                           (7, 'Coco', 2, 'Parrot', 'Female', 3, 5, 1, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Coco.jpg'),
+                                                                                           (8, 'Daisy', 7, 'Turtle', 'Female', 2, 5, NULL, 'http://20.234.5.108:9000/pet-adoption-app/pet-photos/Daisy.jpg');
 
 -- Insert Health Checks
 INSERT INTO health_check (examination_id, details, status, pet_id, veterinarian_id) VALUES
@@ -84,10 +93,11 @@ INSERT INTO contact (id, message, scheduled_visit, status, citizen_id, shelter_i
                                                                                           (3, 'Visit to see your potential pet today.', '2025-02-28 15:00:00', 1, 6, 5),
                                                                                           (4, 'Can i come tomorrow?', '2025-02-20 20:00:00', 0, 6, 5);
 
+
 -- Syncs the id sequences
-SELECT setval('adoption_request_id_seq', COALESCE((SELECT MAX(request_id) FROM adoption), 0) + 1, false);
-SELECT setval('contact_id_seq', COALESCE((SELECT MAX(id) FROM contact), 0) + 1, false);
-SELECT setval('health_check_examination_id_seq', COALESCE((SELECT MAX(examination_id) FROM health_check), 0) + 1, false);
-SELECT setval('pet_id_seq', COALESCE((SELECT MAX(id) FROM pet), 0) + 1, false);
-SELECT setval('roles_id_seq', COALESCE((SELECT MAX(id) FROM roles), 0) + 1, false);
-SELECT setval('users_id_seq', COALESCE((SELECT MAX(id) FROM users), 0) + 1, false);
+ALTER TABLE adoption AUTO_INCREMENT = 7;
+ALTER TABLE contact AUTO_INCREMENT = 5;
+ALTER TABLE health_check AUTO_INCREMENT = 10;
+ALTER TABLE pet AUTO_INCREMENT = 9;
+ALTER TABLE roles AUTO_INCREMENT = 5;
+ALTER TABLE users AUTO_INCREMENT = 8;

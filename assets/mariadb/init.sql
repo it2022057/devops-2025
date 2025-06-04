@@ -1,4 +1,5 @@
 # Recreate the Hibernate-generated schema SQL with "USE mariadb;" prepended
+# Important Notice: This SQL script is designed to be run in a MariaDB database environment
 USE mariadb;
 
 create table adoption (
