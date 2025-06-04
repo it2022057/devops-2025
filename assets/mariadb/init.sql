@@ -1,90 +1,111 @@
--- Insert Users (General)
-INSERT INTO users (id, username, password, email, phone) VALUES
-                                                            (1, 'citizen', '$2a$10$rbOPqiEK4UndJgx.fenFP.WDMwIl4qI/L.oE87ceLT3MPNplp5ef2', 'citizen@example.com', '6943418200'),
-                                                            (2, 'vet', '$2a$10$Nwp5mzjHuViK1f/UaifIIed1kuDeDmbaWwdcqpcrY3yg6cAzRDFL6', 'vet@example.com', '6975418200'),
-                                                            (3, 'shelter1', '$2a$10$GpALHQdK510GEUhqhIEeH.pEfg5q2G.l1sk/lXbFgIbdqwpNDqjLG', 'shelter1@example.com', '6933818407'),
-                                                            (4, 'ariadni', '$2a$10$wWHTt98INEwXiln64kVK3el8vYyKtfE2xcBsWRgE4njYha0mYA1na', 'akarakatsanidi@gmail.com', '6934689124'),
-                                                            (5, 'shelter2', '$2a$10$Z.bvhLa3VE.qcCSl6/SYJudP99Fufz/e.znatoH8Q0WrIB4cmhsDG', 'shelter2@example.com', '6941074299'),
-                                                            (6, 'Byronlouki21', '$2a$10$1KOmsGyaqiVbiJmaFYwq1eiscK31u/qwyzLX8vHmaYTQokSOMDqjO', 'byronlouki21@gmail.com', '6945668184'),
-                                                            (7, 'admin', '$2a$10$COmoVZkTRb.F9LNCFPAPpO6KEhi/PWq0.rueZ/zvERWFjhVqppVoe', 'admin@example.com', '6971106222');
+# Recreate the Hibernate-generated schema SQL with "USE mariadb;" prepended
+USE mariadb;
 
--- User's password - > 1: citizen
---                     2: vet
---                     3: shelter1
---                     4: ariadni
---                     5: shelter2
---                     6: 12Byronlouki!
---                     7: admin
+create table adoption (
+    request_id integer not null auto_increment,
+    status tinyint check (status between 0 and 3),
+    citizen_id integer,
+    shelter_id integer,
+    pet_id integer,
+    primary key (request_id)
+) engine=InnoDB;
 
+create table citizen (
+    address varchar(30) not null,
+    first_name varchar(30) not null,
+    last_name varchar(30) not null,
+    id integer not null,
+    primary key (id)
+) engine=InnoDB;
 
--- Assign Roles to Users
-INSERT INTO user_roles (user_id, role_id) VALUES
-                                              (1, 1),
-                                              (2, 3),
-                                              (3, 2),
-                                              (4, 3),
-                                              (5, 2),
-                                              (6, 1),
-                                              (7, 4);
+create table contact (
+    id integer not null auto_increment,
+    message varchar(255),
+    scheduled_visit datetime(6),
+    status tinyint check (status between 0 and 3),
+    citizen_id integer,
+    shelter_id integer,
+    primary key (id)
+) engine=InnoDB;
 
--- Insert Citizens
-INSERT INTO citizen (id, first_name, last_name, address) VALUES
-    (1, 'Giorgos', 'Xelakis', 'Maiandrou 67'),
-    (6, 'Vyronas', 'Loukidelis', 'Tyannon 18');
+create table health_check (
+    examination_id integer not null auto_increment,
+    details varchar(200),
+    status tinyint check (status between 0 and 3),
+    veterinarian_id integer,
+    pet_id integer,
+    primary key (examination_id)
+) engine=InnoDB;
 
--- Insert Veterinarians
-INSERT INTO veterinarian (id, first_name, last_name) VALUES
-    (2, 'Alice', 'Smith'),
-    (4, 'Ariadni', 'Karakatsanidi');
+create table pet (
+    id integer not null auto_increment,
+    age integer,
+    approval_status tinyint check (approval_status between 0 and 3),
+    image_path varchar(255),
+    name varchar(30) not null,
+    sex varchar(10) not null,
+    species varchar(20) not null,
+    shelter_id integer,
+    citizen_id integer,
+    primary key (id)
+) engine=InnoDB;
 
--- Insert Shelters
-INSERT INTO shelter (id, name, location, address, description, approval_status) VALUES
-    (3, 'Happy Tails Shelter', 'Downtown', '456 Elm St', 'A place for rescued pets', 1),
-    (5, 'Pet family', 'Athens', 'Anakous 2', 'Welcome to our brand new adoption website', 1);
+create table roles (
+    id integer not null auto_increment,
+    name varchar(255) not null,
+    primary key (id)
+) engine=InnoDB;
 
--- Insert Pets
-INSERT INTO pet (id, name, age, species, sex, approval_status, shelter_id, citizen_id, image_path) VALUES
-                                                                                           (1, 'Buddy', 3, 'Dog', 'Male', 1, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Buddy.jpg'),
-                                                                                           (2, 'Mittens', 2, 'Cat', 'Female', 0, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Mittens.jpg'),
-                                                                                           (3, 'Rocky', 1, 'Dog', 'Male', 1, 5, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Rocky.jpg'),
-                                                                                           (4, 'Silver', 4, 'Dog', 'Male', 3, 5, 6, 'http://20.234.5.108/pet-adoption-app/pet-photos/Silver.jpg'),
-                                                                                           (5, 'Bella', 3, 'Dog', 'Female', 1, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Bella.jpg'),
-                                                                                           (6, 'Max', 2, 'Cat', 'Male', 1, 3, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Max.jpg'),
-                                                                                           (7, 'Coco', 2, 'Parrot', 'Female', 3, 5, 1, 'http://20.234.5.108/pet-adoption-app/pet-photos/Coco.jpg'),
-                                                                                           (8, 'Daisy', 7, 'Turtle', 'Female', 2, 5, NULL, 'http://20.234.5.108/pet-adoption-app/pet-photos/Daisy.jpg');
+create table shelter (
+    address varchar(30) not null,
+    approval_status tinyint check (approval_status between 0 and 3),
+    description varchar(200),
+    location varchar(20) not null,
+    name varchar(30) not null,
+    id integer not null,
+    primary key (id)
+) engine=InnoDB;
 
--- Insert Health Checks
-INSERT INTO health_check (examination_id, details, status, pet_id, veterinarian_id) VALUES
-                                                                            (1,  'Routine checkup - healthy', 1, 1, 2),
-                                                                            (2,  'Vaccination completed',1, 3, 2),
-                                                                            (3,  'Routine check-up completed', 1, 1, 4),
-                                                                            (4,  'Scheduled for heartworm test',0, 2, 4),
-                                                                            (5,  'Dental cleaning completed',1, 4, 4),
-                                                                            (6,  'Passed general health test',1, 5, 2),
-                                                                            (7,  'General health check-up passed', 1, 6, 2),
-                                                                            (8,  'Passed routine blood test',1, 7, 2),
-                                                                            (9,  'Failed orthopedic assessment', 2, 8, 4);
+create table user_roles (
+    user_id integer not null,
+    role_id integer not null,
+    primary key (user_id, role_id)
+) engine=InnoDB;
 
--- Insert Adoption Requests
-INSERT INTO adoption (request_id, status, pet_id, citizen_id, shelter_id) VALUES
-    (1, 1, 4, 6, 5),
-    (2, 2, 5, 6, 3),
-    (3, 0, 6, 1, 3),
-    (4, 0, 3, 1, 5),
-    (5, 2, 1, 1, 3),
-    (6, 1, 7, 1, 5);
+create table users (
+    id integer not null auto_increment,
+    email varchar(50) not null,
+    password varchar(255) not null,
+    phone varchar(15) not null,
+    username varchar(20) not null,
+    primary key (id)
+) engine=InnoDB;
 
+create table veterinarian (
+    first_name varchar(30) not null,
+    last_name varchar(30) not null,
+    id integer not null,
+    primary key (id)
+) engine=InnoDB;
 
--- Insert Contacts
-INSERT INTO contact (id, message, scheduled_visit, status, citizen_id, shelter_id) VALUES (1, 'I would really like to visit your shelter sometime.', '2025-03-14 21:00:00.00', 1, 1, 3),
-                                                                                          (2, 'Can i come in your adoption center?', '2025-02-15 14:00:00', 2, 1, 5),
-                                                                                          (3, 'Visit to see your potential pet today.', '2025-02-28 15:00:00', 1, 6, 5),
-                                                                                          (4, 'Can i come tomorrow?', '2025-02-20 20:00:00', 0, 6, 5);
+alter table citizen add constraint UKq131jyycc9ee6gqv85t68v3kx unique (first_name);
+alter table citizen add constraint UKr3xx9lqa4cm4tw9wel8gbei8p unique (last_name);
+alter table users add constraint UKr43af9ap4edm43mmtq01oddj6 unique (username);
+alter table users add constraint UK6dotkott2kjsp8vw4d0m25fb7 unique (email);
+alter table veterinarian add constraint UK1c1q5s0stb2h544r3leohmdq2 unique (first_name);
+alter table veterinarian add constraint UKakuxthhs0xj8k4th3a8or9fyd unique (last_name);
 
--- Syncs the id sequences
-SELECT setval('adoption_request_id_seq', COALESCE((SELECT MAX(request_id) FROM adoption), 0) + 1, false);
-SELECT setval('contact_id_seq', COALESCE((SELECT MAX(id) FROM contact), 0) + 1, false);
-SELECT setval('health_check_examination_id_seq', COALESCE((SELECT MAX(examination_id) FROM health_check), 0) + 1, false);
-SELECT setval('pet_id_seq', COALESCE((SELECT MAX(id) FROM pet), 0) + 1, false);
-SELECT setval('roles_id_seq', COALESCE((SELECT MAX(id) FROM roles), 0) + 1, false);
-SELECT setval('users_id_seq', COALESCE((SELECT MAX(id) FROM users), 0) + 1, false);
+alter table adoption add constraint FK524ve83h4q3vgrpcarjlfqqfh foreign key (citizen_id) references citizen (id);
+alter table adoption add constraint FK3oe17ipty7m7fevf3a7w3s8aj foreign key (shelter_id) references shelter (id);
+alter table adoption add constraint FK1v07h6n52dn0s7rfppgr4tspy foreign key (pet_id) references pet (id);
+alter table citizen add constraint FKkai25xx449cjccv8bheqwxwob foreign key (id) references users (id);
+alter table contact add constraint FKqgw82dufqus2udga2rxuywrye foreign key (citizen_id) references citizen (id);
+alter table contact add constraint FKid2qvl69up65d06cyrdx1fog8 foreign key (shelter_id) references shelter (id);
+alter table health_check add constraint FKn3922p4s30m57k8ibrxgc9we8 foreign key (veterinarian_id) references veterinarian (id);
+alter table health_check add constraint FK8nelrrp9gi5w9ka5sh9vmwwms foreign key (pet_id) references pet (id);
+alter table pet add constraint FKdujrkamkv5tvd3sgqkpu7mwsi foreign key (shelter_id) references shelter (id);
+alter table pet add constraint FKjhf54sbsyw3t4tecoec4m2a2c foreign key (citizen_id) references citizen (id);
+alter table shelter add constraint FKqi4i2l6ml5tx4yyfkutrnnvih foreign key (id) references users (id);
+alter table user_roles add constraint FKh8ciramu9cc9q3qcqiv4ue8a6 foreign key (role_id) references roles (id);
+alter table user_roles add constraint FKhfh9dx7w3ubf1co1vdev94g3f foreign key (user_id) references users (id);
+alter table veterinarian add constraint FKs04bhhic2vp0h6sbbamdno6wu foreign key (id) references users (id);
