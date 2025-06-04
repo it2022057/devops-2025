@@ -20,6 +20,7 @@ services:
       retries: 3
     volumes:
       - 'db-data:/var/lib/mysql'
+      - ./assets/mariadb/init.sql:/docker-entrypoint-initdb.d # Custom SQL script to insert starter data to the database
 
   # Mailhog service for email testing
   mailhog:
@@ -98,7 +99,7 @@ services:
     image: nginx:alpine # Use a specific version of Nginx that has fewer vulnerabilities
     restart: always
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # Custom Nginx configuration with read-only access
+      - ./assets/nginx/nginx.conf:/etc/nginx/nginx.conf:ro # Custom Nginx configuration with read-only access
     ports:
       - "80:80"
     depends_on:
