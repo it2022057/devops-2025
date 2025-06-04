@@ -20,7 +20,7 @@ services:
       retries: 3
     volumes:
       - 'db-data:/var/lib/mysql'
-      - ./assets/mariadb/init.sql:/docker-entrypoint-initdb.d # Custom SQL script to insert starter data to the database
+      - ./assets/mariadb/init.sql:/docker-entrypoint-initdb.d/1.sql # Custom SQL script to insert starter data to the database
 
   # Mailhog service for email testing
   mailhog:
