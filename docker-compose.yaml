@@ -55,7 +55,7 @@ services:
       timeout: 30s
       retries: 3
     volumes:
-      - minio-data:/data
+      - ./minio:/data # Persists MinIO data in startup and then works as a volume
 
   # Main Spring Boot application service
   spring:
@@ -116,4 +116,3 @@ services:
 
 volumes:
   db-data: # Volume to persist database data
-  minio-data: # Volume to persist MinIO objects
