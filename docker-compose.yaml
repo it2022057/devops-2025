@@ -40,7 +40,7 @@ services:
 
   # MinIO service for object storage
   minio:
-    image: quay.io/minio/minio:latest
+    image: minio/minio:latest
     command: server /data --console-address ":9001"
     restart: always
     ports:
