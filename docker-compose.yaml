@@ -24,7 +24,10 @@ services:
 
   # Mailhog service for email testing
   mailhog:
-    image: mailhog/mailhog:latest
+    image: mailhog
+    build:
+      context: ./email
+      dockerfile: Dockerfile # Custom Dockerfile for building the mailhog image
     restart: always
     ports:
       - "8025:8025"  # Web UI
