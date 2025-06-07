@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_TOKEN=credentials('github-token')
-        DOCKER_USER='it2022057'
+        DOCKER_USER = 'it2022057'
         DOCKER_SERVER='ghcr.io'
         DOCKER_PREFIX='ghcr.io/it2022057/nginx'
     }
@@ -32,7 +32,7 @@ pipeline {
                 sh '''
                     docker pull $DOCKER_PREFIX:latest
                     echo "Running nginx container..."
-                    docker run -d --name test-nginx -p 8181:81 $DOCKER_PREFIX:latest
+                    docker run -d --name test-nginx -p 8081:80 $DOCKER_PREFIX:latest
                 '''
             }
         }
@@ -42,8 +42,8 @@ pipeline {
                 sh '''
                 sleep 3
                 echo "Testing nginx..."
-                curl --fail http://localhost:8181 || (echo "❌ NGINX failed to respond" && exit 1)
-                nc -z localhost 8181 || (echo "❌ Port 8080 not open" && exit 1)
+                curl --fail http://localhost:8081 || (echo "❌ NGINX failed to respond" && exit 1)
+                nc -z localhost 8081 || (echo "❌ Port 8080 not open" && exit 1)
                 '''
             }
         }
@@ -54,7 +54,7 @@ pipeline {
                     echo "Cleaning up the mariadb container now..."
                     docker stop test-nginx || true
                     docker rm -f test-nginx || true
-                    ! lsof -i :8181 && echo "✅ Port 8181 is free" || (echo "❌ Port 8181 still in use" && exit 1)
+                    ! lsof -i :8081 && echo "✅ Port 8081 is free" || (echo "❌ Port 8081 still in use" && exit 1)
             '''
             }
         }
@@ -62,7 +62,12 @@ pipeline {
 
     post {
         always {
-            mail  to: "byronlouki21@gmail.com", from: "byronlouki21@gmail.com", body: "Project ${env.JOB_NAME} <br>, Build status ${currentBuild.currentResult} <br> Build Number: ${env.BUILD_NUMBER} <br> Build URL: ${env.BUILD_URL}", subject: "JENKINS: Project name -> ${env.JOB_NAME}, Build -> ${currentBuild.currentResult}"
+            mail(
+                to: 'byronlouki21@gmail.com',
+                from: 'byronlouki21@gmail.com',
+                body: "Project ${env.JOB_NAME} <br>, Build status ${currentBuild.currentResult} <br> Build Number: ${env.BUILD_NUMBER} <br> Build URL: ${env.BUILD_URL}", subject: "JENKINS: Project name -> ${env.JOB_NAME}, Build -> ${currentBuild.currentResult}",
+                mimetype: 'text/html'
+            )
         }
     }
 }
