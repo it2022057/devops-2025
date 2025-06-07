@@ -32,7 +32,7 @@ pipeline {
                 sh '''
                     docker pull $DOCKER_PREFIX:latest
                     echo "Running nginx container..."
-                    docker run -d --name test-nginx -p 8080:80 $DOCKER_PREFIX:latest
+                    docker run -d --name test-nginx -p 8181:81 $DOCKER_PREFIX:latest
                 '''
             }
         }
@@ -42,8 +42,8 @@ pipeline {
                 sh '''
                 sleep 3
                 echo "Testing nginx..."
-                curl --fail http://localhost:8080 || (echo "❌ NGINX failed to respond" && exit 1)
-                nc -z localhost 8080 || (echo "❌ Port 8080 not open" && exit 1)
+                curl --fail http://localhost:8181 || (echo "❌ NGINX failed to respond" && exit 1)
+                nc -z localhost 8181 || (echo "❌ Port 8080 not open" && exit 1)
                 '''
             }
         }
@@ -54,7 +54,7 @@ pipeline {
                     echo "Cleaning up the mariadb container now..."
                     docker stop test-nginx || true
                     docker rm -f test-nginx || true
-                    ! lsof -i :8080 && echo "✅ Port 8080 is free" || (echo "❌ Port 8080 still in use" && exit 1)
+                    ! lsof -i :8181 && echo "✅ Port 8181 is free" || (echo "❌ Port 8181 still in use" && exit 1)
             '''
             }
         }
