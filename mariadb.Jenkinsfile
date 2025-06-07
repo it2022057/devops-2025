@@ -60,6 +60,8 @@ pipeline {
                     echo "Cleaning up the mariadb container now..."
                     docker stop test-mariadb || true
                     docker rm -f test-mariadb || true
+                    ! lsof -i :3306 && echo "✅ Port 3306 is free" || (echo "❌ Port 3306 still in use" && exit 1)
+
             '''
             }
         }

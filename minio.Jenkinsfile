@@ -60,6 +60,9 @@ pipeline {
                     echo "Cleaning up the minio container now..."
                     docker stop test-minio || true
                     docker rm -f test-minio || true
+                    ! lsof -i :9000 && echo "✅ Port 9000 is free" || (echo "❌ Port 9000 still in use" && exit 1)
+                    ! lsof -i :9001 && echo "✅ Port 9001 is free" || (echo "❌ Port 9001 still in use" && exit 1)
+
             '''
             }
         }
