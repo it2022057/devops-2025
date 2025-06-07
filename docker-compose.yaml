@@ -26,8 +26,8 @@ services:
   mailhog:
     image: mailhog
     build:
-      context: ./email
-      dockerfile: Dockerfile # Custom Dockerfile for building the mailhog image
+      context: .
+      dockerfile: mailhog.Dockerfile # Custom Dockerfile for building the mailhog image
     restart: always
     ports:
       - "8025:8025"  # Web UI
