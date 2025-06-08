@@ -103,6 +103,8 @@ services:
     restart: always
     volumes:
       - ./assets/nginx/nginx.conf:/etc/nginx/nginx.conf:ro # Custom Nginx configuration with read-only access
+      - ./assets/certs/mydomain.crt:/etc/ssl/certs/mydomain.crt:ro # SSL certificate
+      - ./assets/certs/private.key:/etc/ssl/private/private.key:ro # SSL private key
     ports:
       - "80:80"
     depends_on:
