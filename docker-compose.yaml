@@ -107,6 +107,7 @@ services:
       - ./assets/certs/private.key:/etc/ssl/private/private.key:ro # SSL private key
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       spring:
         condition: service_healthy
