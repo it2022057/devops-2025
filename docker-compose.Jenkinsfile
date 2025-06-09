@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Run ansible pipeline') {
+            steps {
+                build job: 'ansible'
+            }
+        }
+
+        stage('Test connection to deploy env') {
+            steps {
+                sh '''
+                ansible -i ~/workspace/ansible/hosts.yaml -m ping devops-vm-3
+            '''
+            }
+        }
+
+        stage('Install postgres') {
+            steps {
+                sh '''
+                    export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
+                    ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbooks/docker_run.yaml
+                '''
+            }
+        }
+    }
+}
