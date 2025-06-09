@@ -2,6 +2,11 @@
 
 #### This code is a project for the DevOps course at Harokopio University of Athens, Department of Informatics and Telematics. A multi-component system deployed in remote virtual machines using Docker, Ansible and Jenkins, with HTTPS reverse proxy via NGINX.
 
+## 📚 Project Docs
+
+- 🧰 [DevOps Guide](./README.md)
+- ⚙️ [Instruction Guide](./README.guide.md)
+
 ## 🌱 Project Overview
 
 ##### This project simulates a distributed system consisting of the following components:
@@ -130,61 +135,6 @@ https://vm2.loukidns.ip-ddns.com/minio/
 * devops-vm-3
 ```bash
 https://vm3.loukidns.ip-ddns.com/minio/
-```
-
-## 📦 Docker Images
-
-Each component in the project is published to GitHub Container Registry (GHCR). You can manually pull and run the images using Docker. Keep in mind each image has a unique tag that shows in which commit it got published.
-
-### 🔐 Accessing Private Docker Images
-
-The Docker images used in this project are hosted on **GitHub Container Registry (GHCR)** and are **private**!!!
-
-### 🧭 Who Can Access?
-
-* Users **invited to this repository** with at least **Read** permission.
-* Users who **authenticate with a GitHub token** that includes the correct scopes.
-
----
-
-### 🔑 Steps to Pull a Private Image
-
-1. **Generate a GitHub Personal Access Token (PAT)**  
-   Go to [GitHub → Developer Settings → Tokens](https://github.com/settings/tokens), select classic and create a token with the following scopes:
-   * `read:packages`
-   * (optional) `repo` — if you're accessing a private repo
-   * `save` the token to a file
-
-2. **Authenticate with GHCR via Docker**
-
-```bash
-cat ~/github-image-repo.txt | docker login ghcr.io -u <GITHUB-USERNAME> --password-stdin
-```
-
-### 🔽 Pull Commands
-
-*  Spring Boot main app (custom image)
-```bash
-docker pull ghcr.io/it2022057/main-app:latest
-```
-
-* MinIO (official image with tag:latest)
-```bash
-docker pull ghcr.io/it2022057/minio:latest
-```
-
-* MailHog (custom image)
-```bash
-docker pull ghcr.io/it2022057/mailhog:latest
-```
-
-* MariaDB (official image with tag:10.2.44)
-```bash
-docker pull ghcr.io/it2022057/mariadb:latest
-```
-* Nginx (official image with tag:alpine)
-```bass
-docker pull ghcr.io/it2022057/nginx:latest
 ```
 
 ## 📬 Contact

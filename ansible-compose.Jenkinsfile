@@ -18,10 +18,12 @@ pipeline {
 
         stage('Install system components all at once') {
             steps {
-                sh '''
-                    export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible/hosts.yaml -l db-server,devops-vm-2 ~/workspace/ansible/playbook/setup_all.yaml
-                '''
+                sshagent(credentials: ['jenkins-ssh']) {
+                    sh '''
+                        export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
+                        ansible-playbook -i ~/workspace/ansible/hosts.yaml -l db-server,devops-vm-2 ~/workspace/ansible/playbook/setup_all.yaml
+                    '''
+                }
             }
         }
     }

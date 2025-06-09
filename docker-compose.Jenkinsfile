@@ -18,7 +18,7 @@ pipeline {
 
         stage('Install all the components in a docker environment') {
             steps {
-                sshagent(credentials: ['github-ssh']) {
+                sshagent(credentials: ['jenkins-ssh']) {
                     sh '''
                         export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                         ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/docker_run.yaml

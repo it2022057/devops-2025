@@ -64,10 +64,12 @@ pipeline {
                 expression { return params.INSTALL_SPRING }
             }
             steps {
-                sh '''
-                    export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible/hosts.yaml -l devops-vm-2 ~/workspace/ansible/playbook/spring.yaml
-                '''
+                sshagent(credentials: ['jenkins-ssh']) {
+                    sh '''
+                        export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
+                        ansible-playbook -i ~/workspace/ansible/hosts.yaml -l devops-vm-2 ~/workspace/ansible/playbook/spring.yaml
+                    '''
+                }
             }
         }
     }
