@@ -66,6 +66,9 @@ pipeline {
             steps {
                 sshagent(credentials: ['jenkins-ssh']) {
                     sh '''
+                        ssh-add -l
+                        eval "$(ssh-agent -s)"
+                        ssh-add -l
                         export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                         ansible-playbook -i ~/workspace/ansible/hosts.yaml -l devops-vm-2 ~/workspace/ansible/playbook/spring.yaml
                     '''

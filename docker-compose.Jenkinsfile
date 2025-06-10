@@ -20,6 +20,9 @@ pipeline {
             steps {
                 sshagent(credentials: ['jenkins-ssh']) {
                     sh '''
+                        ssh-add -l
+                        eval "$(ssh-agent -s)"
+                        ssh-add -l
                         export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                         ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/docker_run.yaml
                     '''
