@@ -27,7 +27,7 @@ pipeline {
             steps {
                 sh '''
                 export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                ansible -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/setup_jenkins.yaml
+                ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/setup_jenkins.yaml
             '''
             }
         }
