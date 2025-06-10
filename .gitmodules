@@ -1,6 +1,6 @@
 [submodule "ds-project-2024"]
 	path = ds-project-2024
-	url = git@github.com:it2022057/ds-project-2024.git
+	url = https://github.com/it2022057/ds-project-2024.git
 [submodule "ansible-playground"]
 	path = ansible-playground
-	url = git@github.com:it2022057/ansible-playground.git
+	url = https://github.com/it2022057/ansible-playground.git
