@@ -23,6 +23,14 @@ pipeline {
             }
         }
 
+        stage('Setup jenkins server') {
+            steps {
+                sh '''
+                ansible -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/setup_jenkins.yaml
+            '''
+            }
+        }
+
         stage('Install mariadb') {
             when {
                 expression { return params.INSTALL_MARIADB }
@@ -64,13 +72,13 @@ pipeline {
                 expression { return params.INSTALL_SPRING }
             }
             steps {
-                sshagent(credentials: ['jenkins-ssh']) {
+                //sshagent(credentials: ['jenkins-ssh']) {
                     sh '''
                         ssh-add -l
                         export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                         ansible-playbook -i ~/workspace/ansible/hosts.yaml -l devops-vm-2 ~/workspace/ansible/playbook/spring.yaml
                     '''
-                }
+                // }
             }
         }
     }
