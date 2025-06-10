@@ -26,6 +26,7 @@ pipeline {
         stage('Setup jenkins server') {
             steps {
                 sh '''
+                export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                 ansible -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/setup_jenkins.yaml
             '''
             }
