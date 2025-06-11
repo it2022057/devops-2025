@@ -111,7 +111,7 @@ ssh-keygen -t rsa -C "jenkins@yourdomain.com"
 
 #### 🧪 3. Test the Connection
 
-### Add ssh key to GitHub
+### 🔑 Add ssh key to GitHub
 
 * Go to GitHub → Settings → SSH and GPG Keys
 * Click "New SSH key"

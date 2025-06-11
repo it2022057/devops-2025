@@ -28,6 +28,10 @@ devops-2025/
 ├── docker-compose.yaml         # Defines images and runs all components via Docker Compose
 ├── mailhog.Dockerfile          # Custom Dockerfile for MailHog
 │
+├── ansible.Jenkinsfile         # Jenkins pipeline for deploying the components in a vm with ansible
+├── ansible-compose.Jenkinsfile # Jenkins pipeline for deploying the components all together in a vm with ansible
+├── docker-compose.Jenkinsfile  # Jenkins pipeline for deploying the components in a docker environent with ansible
+|
 ├── mailhog.Jenkinsfile         # Jenkins pipeline for MailHog image test + push in github
 ├── mariadb.Jenkinsfile         # Jenkins pipeline for MariaDB image test + push in github
 ├── minio.Jenkinsfile           # Jenkins pipeline for MinIO image test + push in github
@@ -36,6 +40,8 @@ devops-2025/
 ├── .gitmodules                 # Git submodule configuration
 ├── .dockerignore               # Docker exclusions
 ├── .gitignore                  # Git exclusions
+|
+├── README.guide.md             # Guide
 └── README.md                   # Project documentation
 
 ```
