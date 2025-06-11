@@ -27,7 +27,7 @@ pipeline {
             }
         }
 
-        stage('Pull and Run Mailhog') {
+        stage('Pull and Run mariadb') {
             steps {
                 sh '''
                 docker pull $DOCKER_PREFIX:latest
