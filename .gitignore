@@ -6,6 +6,14 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Secrets
+.env
+.vault_pass.txt
+
+# Certificates
+assets/certs/*.crt
+assets/certs/*.key
+
 # Java
 *.class
 

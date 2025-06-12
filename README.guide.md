@@ -1,5 +1,30 @@
 # 🚀 Guide for devops-2025
 
+## 🗃️ Git clone
+
+```bash
+git clone https://github.com/it2022057/devops-2025.git
+cd devops-2025
+git submodule init
+git submodule update
+```
+
+## Ansible-vault and Makefile Instructions
+
+* Copy the **.env.template** to **.env** file
+```bash
+make env-init
+```
+
+* Edit **.env** and fill in your vault password
+
+* Create **.vault_pass.txt**
+```bash
+make vault-pass
+```
+
+### Now you’re ready to run your Ansible commands using: `--vault-password-file .vault_pass.txt`. And don't worry, nothing gets pushed in the repository thanks to `.gitignote`
+
 ## 🔑 Generating SSH Key and Adding It to GitHub
 
 To enable secure ssh access to your GitHub repositories (especially private ones), follow the steps below.

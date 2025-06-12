@@ -46,15 +46,6 @@ devops-2025/
 
 ```
 
-## 🗃️ Git clone
-
-```bash
-git clone https://github.com/it2022057/devops-2025.git
-cd devops-2025
-git submodule init
-git submodule update
-```
-
 ## ⚙️ Requirements
 
 ✅ Ansible

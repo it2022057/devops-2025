@@ -18,10 +18,19 @@ pipeline {
 
         stage('Install all the components in a docker environment') {
             steps {
-                sh '''
-                    export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible/hosts.yaml ~/workspace/ansible/playbook/docker_run.yaml
-                '''
+                ansiblePlaybook(
+                    vaultCredentialsId: 'AnsibleVault',
+                    playbook: 'playbook/docker_run.yaml',
+                    inventory: '~/workspace/ansible/playbook/docker_run.yaml',
+                    // extras: '--vault-password-file .vault_pass.txt',
+                    ansibleConfig: '~/workspace/ansible/ansible.cfg'
+                )
+                // sh '''
+                //     export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
+                //     ansible-playbook -i ~/workspace/ansible/hosts.yaml \
+                //     ~/workspace/ansible/playbook/docker_run.yaml \
+                //     --vault-password-file .vault_pass.txt
+                // '''
             }
         }
     }
