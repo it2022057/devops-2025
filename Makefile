@@ -1,5 +1,5 @@
 # Load variables from .env (user must create it first)
-include .env
+-include .env
 export
 
 VAULT_PASS_FILE=.vault_pass.txt
@@ -17,3 +17,4 @@ endif
 .PHONY: env-init
 env-init:
 	@test -f .env || cp .env.template .env && echo ".env created from template"
+
