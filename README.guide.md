@@ -93,9 +93,9 @@ Before running pipelines and jobs, make sure you already did the following:
 * Ssh agent 
 * Email extension plugin
 
-### Ssh setup for cloning private git repositories and accessing remote vms
+### Ssh setup for accessing remote vms in jenkins
 
-To allow jenkins user to interact with private git repositories or access remote VMs using Ansible, follow these steps to configure the Jenkins user's SSH environment.
+To allow jenkins user to access remote VMs using Ansible, follow these steps to configure the Jenkins user's SSH environment.
 
 
 #### 🔐 1. Generate or Copy an SSH Key
@@ -109,7 +109,9 @@ ssh-keygen -t rsa -C "jenkins@yourdomain.com"
 
 #### 📎 2. Configure ~/.ssh/config
 
-#### 🧪 3. Test the Connection
+#### 🔧 3. Copy the new public key into the folder ~/.ssh/authorized_keys of each VM you want to use
+
+#### 🧪 4. Test the Connection
 
 ### 🔑 Add ssh key to GitHub
 
