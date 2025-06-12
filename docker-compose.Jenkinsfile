@@ -30,14 +30,12 @@ pipeline {
 
         stage('Install all the components in a docker environment') {
             steps {
-                sh '''
                 ansiblePlaybook(
+                    vaultCredentialsId: 'AnsibleVault',
                     playbook: 'system-pipeline-docker-compose/devops-2025/ansible-playground/playbook/docker_run.yaml',
                     inventory: 'system-pipeline-docker-compose/devops-2025/ansible-playground/hosts.yaml',
-                    ansibleConfig: 'system-pipeline-docker-compose/devops-2025/ansible-playground/ansible.cfg',
-                    vaultCredentialsId: 'AnsibleVault'
+                    ansibleConfig: 'system-pipeline-docker-compose/devops-2025/ansible-playground/ansible.cfg'
                 )
-            '''
             }
         }
     }

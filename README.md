@@ -40,6 +40,8 @@ devops-2025/
 ├── .gitmodules                 # Git submodule configuration
 ├── .dockerignore               # Docker exclusions
 ├── .gitignore                  # Git exclusions
+├── .env.template               # Template for user's secrets
+├── Makefile                    # Helps decrypting ansible-vaults
 |
 ├── README.guide.md             # Guide
 └── README.md                   # Project documentation
