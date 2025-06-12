@@ -34,7 +34,7 @@ pipeline {
                 export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                 ansible-playbook -i ~/workspace/ansible/hosts.yaml \
                 ~/workspace/ansible/playbook/docker_run.yaml \
-                --vault-password-file $WORKSPACE/vault_pass.txt
+                --vault-password-file $WORKSPACE/.vault_pass.txt
             '''
             }
         }
