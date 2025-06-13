@@ -23,6 +23,8 @@ make env-init
 make vault-pass
 ```
 
+### !!!Also do not forget to create a .env file in jenkins user at directory ~/workspace/system-pipeline-docker-compose with your vault password!!!
+
 ### Now you’re ready to run your Ansible commands using: `--vault-password-file .vault_pass.txt`. And don't worry, nothing gets pushed in the repository thanks to `.gitignote`
 
 ## 🔑 Generating SSH Key and Adding It to GitHub
