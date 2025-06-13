@@ -120,6 +120,27 @@ Before running pipelines and jobs, make sure you already did the following:
 * Ssh agent 
 * Email extension plugin
 
+## 🔐  Encrypt Your Secrets with Ansible Vault
+
+* Run this in the jenkins server home directory to create your encrypted file:
+
+```bash
+mkdir -p ~/app-secrets/mini
+ansible-vault create ~/app-secrets/mini/.env
+```
+
+* In the promt type your secret and place this into the editor
+```bash
+VAULT_PASSWORD=<your password>
+```
+
+* Check if it got encrypted
+```bash
+cat ~/app-secrets/mini/.env
+```
+
+* Then add a new `Credential` as `Secret text`. Set the value as your **vault password** and **ID** as **AnsibleVault** and then save it
+
 ### Ssh setup for accessing remote vms in jenkins
 
 To allow jenkins user to access remote VMs using Ansible, follow these steps to configure the Jenkins user's SSH environment.
