@@ -43,8 +43,8 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     vaultCredentialsId: 'AnsibleVault',
-                    playbook: '~/workspace/ansible/playbook/docker_run.yaml',
-                    inventory: '~/workspace/ansible/hosts.yaml',
+                    playbook: '/var/lib/jenkins/workspace/ansible/playbook/docker_run.yaml',
+                    inventory: '/var/lib/jenkins/workspace/ansible/hosts.yaml',
                     //extras: '--vault-password-file $WORKSPACE/devops-2025/.vault_pass.txt',
                 )
             }
