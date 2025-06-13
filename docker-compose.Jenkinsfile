@@ -8,6 +8,17 @@ pipeline {
             }
         }
 
+        stage('Update the submodules') {
+            steps {
+                sh '''
+                echo 'Update the submodules'
+                cd devops-2025
+                git submodule init
+                git submodule update
+                '''
+            }
+        }
+
         stage('Test connection to deploy env') {
             steps {
                 sh '''
@@ -16,17 +27,17 @@ pipeline {
             }
         }
 
-        stage('Get ready for ansible run') {
-            steps {
-                sh '''
-                cd $WORKSPACE
-                echo 'Make sure .env exists (or create from .env.template if needed)'
-                make env-init
-                echo 'Generate .vault_pass.txt from .env'
-                make vault-pass
-                '''
-            }
-        }
+        // stage('Get ready for ansible run') {
+        //     steps {
+        //         sh '''
+        //         cd $WORKSPACE
+        //         echo 'Make sure .env exists (or create from .env.template if needed)'
+        //         make env-init
+        //         echo 'Generate .vault_pass.txt from .env'
+        //         make vault-pass
+        //         '''
+        //     }
+        // }
 
         // stage('Copy Ansible Artifacts') {
         //     steps {
@@ -44,8 +55,7 @@ pipeline {
                 ansiblePlaybook(
                     vaultCredentialsId: 'AnsibleVault',
                     playbook: '/var/lib/jenkins/workspace/ansible/playbook/docker_run.yaml',
-                    inventory: '/var/lib/jenkins/workspace/ansible/hosts.yaml',
-                    //extras: '--vault-password-file $WORKSPACE/devops-2025/.vault_pass.txt',
+                    inventory: '/var/lib/jenkins/workspace/ansible/hosts.yaml'
                 )
             }
         }
