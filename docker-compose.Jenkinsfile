@@ -12,7 +12,6 @@ pipeline {
             steps {
                 sh '''
                 echo 'Update the submodules'
-                cd devops-2025
                 git submodule init
                 git submodule update
                 '''
@@ -54,8 +53,8 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     vaultCredentialsId: 'AnsibleVault',
-                    playbook: '/var/lib/jenkins/workspace/ansible/playbook/docker_run.yaml',
-                    inventory: '/var/lib/jenkins/workspace/ansible/hosts.yaml'
+                    playbook: 'ansible-playground/playbook/docker_run.yaml',
+                    inventory: 'ansible-playground/hosts.yaml'
                 )
             }
         }
