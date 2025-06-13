@@ -28,24 +28,24 @@ pipeline {
             }
         }
 
-        stage('Copy Ansible Artifacts') {
-            steps {
-                copyArtifacts(
-                    projectName: 'ansible',
-                    filter: '**/*',
-                    target: 'ansible', // this will copy into ./ansible in current job
-                    flatten: false
-                )
-            }
-        }
+        // stage('Copy Ansible Artifacts') {
+        //     steps {
+        //         copyArtifacts(
+        //             projectName: 'ansible',
+        //             filter: '**/*',
+        //             target: 'ansible', // this will copy into ./ansible in current job
+        //             flatten: false
+        //         )
+        //     }
+        // }
 
         stage('Install all the components in a docker environment') {
             steps {
                 ansiblePlaybook(
                     vaultCredentialsId: 'AnsibleVault',
-                    playbook: 'ansible/playbook/docker_run.yaml',
-                    inventory: 'ansible/hosts.yaml',
-                    extras: '--vault-password-file $WORKSPACE/devops-2025/.vault_pass.txt',
+                    playbook: '~/workspace/ansible/playbook/docker_run.yaml',
+                    inventory: '~/workspace/ansible/hosts.yaml',
+                    //extras: '--vault-password-file $WORKSPACE/devops-2025/.vault_pass.txt',
                 )
             }
         }
