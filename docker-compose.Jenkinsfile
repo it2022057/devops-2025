@@ -26,33 +26,10 @@ pipeline {
             }
         }
 
-        // stage('Get ready for ansible run') {
-        //     steps {
-        //         sh '''
-        //         cd $WORKSPACE
-        //         echo 'Make sure .env exists (or create from .env.template if needed)'
-        //         make env-init
-        //         echo 'Generate .vault_pass.txt from .env'
-        //         make vault-pass
-        //         '''
-        //     }
-        // }
-
-        // stage('Copy Ansible Artifacts') {
-        //     steps {
-        //         copyArtifacts(
-        //             projectName: 'ansible',
-        //             filter: '**/*',
-        //             target: 'ansible', // this will copy into ./ansible in current job
-        //             flatten: false
-        //         )
-        //     }
-        // }
-
         stage('Install all the components in a docker environment') {
             steps {
                 ansiblePlaybook(
-                    vaultCredentialsId: 'AnsibleVault',
+                    vaultCredentialsId: 'AnsibleVault',   // Replace with your vault credentials ID
                     playbook: 'ansible-playground/playbook/docker_run.yaml',
                     inventory: 'ansible-playground/hosts.yaml'
                 )
@@ -60,7 +37,3 @@ pipeline {
         }
     }
 }
-                // export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                // ansible-playbook -i ~/workspace/ansible/hosts.yaml \
-                // ~/workspace/ansible/playbook/docker_run.yaml \
-                // --vault-password-file .vault_pass.txt
